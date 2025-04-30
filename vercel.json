@@ -1,0 +1,16 @@
+{
+  "builds": [
+    { "src": "app/package.json", "use": "@vercel/next" },
+    { "src": "indexer/src/api/index.ts", "use": "@vercel/node" }
+  ],
+  "routes": [
+    {
+      "src": "/(proposals|graphql)(.*)",
+      "dest": "/indexer/src/api/index.ts"
+    },
+    {
+      "src": "(.*)",
+      "dest": "/app/$1"
+    }
+  ]
+} 
