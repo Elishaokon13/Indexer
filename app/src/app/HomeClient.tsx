@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 
 import { Footer } from '@/components/Footer'
@@ -25,6 +25,7 @@ import {
 } from '@/lib/utils'
 
 export default function HomeClient({ proposals }: { proposals: EnhancedProposalWithVotes[] }) {
+  const router = useRouter()
   const MotionTableRow = motion(TableRow)
 
   return (
@@ -86,23 +87,21 @@ export default function HomeClient({ proposals }: { proposals: EnhancedProposalW
             {proposals.map((proposal, i) => (
               <MotionTableRow
                 key={proposal.id}
-                className="group"
+                className="group cursor-pointer"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: i * 0.05, duration: 0.4 }}
                 whileHover={{ scale: 1.02 }}
+                onClick={() => router.push(`/proposal/${proposal.id}`)}
               >
                 <TableCell className="space-y-0.5">
                   <ProposalStatus proposal={proposal} className="table-cell lg:hidden" />
                   <span className="block">{formatTimestamp(proposal.createdAtTimestamp)}</span>
                 </TableCell>
                 <TableCell className="md:max-w-0 md:truncate">
-                  <Link
-                    href={`/proposal/${proposal.id}`}
-                    className="font-medium transition-colors hover:underline group-hover:text-primary-brand"
-                  >
+                  <span className="font-medium transition-colors hover:underline group-hover:text-primary-brand">
                     {proposal.title}
-                  </Link>
+                  </span>
                 </TableCell>
                 <TableCell className="hidden lg:table-cell">
                   <ProposalStatus proposal={proposal} />
