@@ -304,7 +304,7 @@ export function ProposalPageClient({ proposal }: Props) {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.4, duration: 0.5 }}
-          className="sticky top-6 hover-lift subtle-shadow rounded-xl lg:h-[calc(100svh-3rem)]"
+          className="sticky top-6 hover-lift subtle-shadow rounded-xl lg:h-[calc(100svh-3rem)] overflow-y-auto"
           id="votes"
         >
           <VotingCardHeader proposal={proposal} />

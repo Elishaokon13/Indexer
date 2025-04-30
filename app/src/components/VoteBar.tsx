@@ -21,8 +21,8 @@ export function VoteBar({
     totalValue !== 0 ? (abstainValue / totalValue) * 100 : 0
 
   return (
-    <div className={cn('overflow-hidden rounded-full bg-secondary', className)}>
-      <div className="flex h-6 w-full transition-all duration-500">
+    <div className={cn('overflow-x-auto overflow-y-hidden rounded-md bg-secondary', className)}>
+      <div className="flex h-6 min-w-full flex-shrink-0 transition-all duration-500">
         <div
           className="h-full bg-emerald-500 transition-all duration-500"
           style={{ width: `${forPercentage}%` }}
@@ -37,9 +37,9 @@ export function VoteBar({
         />
       </div>
       
-      <div className="mt-1 flex justify-between text-xs text-muted-foreground">
-        <div className="flex gap-5">
-          <span className="flex items-center">
+      <div className="mt-1 overflow-x-auto whitespace-nowrap text-xs text-muted-foreground">
+        <div className="inline-flex items-center gap-5 px-2">
+          <span className="flex ml-6 items-center">
             <span className="mr-1.5 inline-block h-2 w-2 rounded-full bg-emerald-500"></span>
             For ({forPercentage.toFixed(1)}%)
           </span>

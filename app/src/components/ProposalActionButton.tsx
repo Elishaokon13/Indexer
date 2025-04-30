@@ -65,7 +65,7 @@ export function ProposalActionButton({ proposal, action }: Props) {
     <form onSubmit={handleSubmit}>
       <Button
         type="submit"
-        variant="primary"
+        variant="default"
         className="w-full font-bold capitalize"
         isLoading={tx.isPending || receipt.isLoading}
       >
