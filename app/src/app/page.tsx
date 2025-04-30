@@ -19,6 +19,7 @@ import {
   getPercentageOfTotalVotes,
   getTotalVotes,
 } from '@/lib/utils'
+import { EnhancedProposalWithVotes } from 'indexer/types'
 
 // Invalidate the cache when a request comes in, at most once every 10 seconds.
 export const revalidate = 10
@@ -86,7 +87,7 @@ export default async function Home() {
               <TableRow key={proposal.id} className="group transition-colors">
                 <TableCell className="space-y-0.5">
                   <ProposalStatus
-                    proposal={proposal}
+                    proposal={proposal as EnhancedProposalWithVotes}
                     className="table-cell lg:hidden"
                   />
 
@@ -102,9 +103,9 @@ export default async function Home() {
                   >
                     {proposal.title}
                   </Link>
-                </TableCell>
+                  </TableCell>
                 <TableCell className="hidden lg:table-cell">
-                  <ProposalStatus proposal={proposal} />
+                  <ProposalStatus proposal={proposal as EnhancedProposalWithVotes} />
                 </TableCell>
                 <TableCell className="hidden space-y-1 text-right md:table-cell">
                   <span>
