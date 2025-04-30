@@ -1,41 +1,58 @@
-import { EnhancedProposalWithVotes } from 'indexer/types'
+import { cn } from '@/lib/utils'
 
-import { Typography } from '@/components/ui/typography'
-import {
-  bigintToFormattedString,
-  cn,
-  getPercentageOfTotalVotes,
-} from '@/lib/utils'
-
-type Props = {
-  proposal: EnhancedProposalWithVotes
-  voteType: 'for' | 'against' | 'abstain'
+type VoteBarProps = {
+  forValue: number
+  againstValue: number
+  abstainValue: number
+  className?: string
 }
 
-export function VoteBar({ proposal, voteType }: Props) {
-  const key = `${voteType}Votes` as const
+export function VoteBar({
+  forValue,
+  againstValue,
+  abstainValue,
+  className,
+}: VoteBarProps) {
+  const totalValue = forValue + againstValue + abstainValue
+  const forPercentage = totalValue !== 0 ? (forValue / totalValue) * 100 : 0
+  const againstPercentage =
+    totalValue !== 0 ? (againstValue / totalValue) * 100 : 0
+  const abstainPercentage =
+    totalValue !== 0 ? (abstainValue / totalValue) * 100 : 0
 
   return (
-    <div className="relative overflow-hidden rounded bg-zinc-100">
-      <div className="relative z-10 flex justify-between gap-2 p-2 text-sm capitalize leading-none">
-        <Typography className="font-medium">
-          {bigintToFormattedString(proposal[key])}
-        </Typography>
-
-        <Typography>{voteType}</Typography>
+    <div className={cn('overflow-hidden rounded-full bg-secondary', className)}>
+      <div className="flex h-6 w-full transition-all duration-500">
+        <div
+          className="h-full bg-emerald-500 transition-all duration-500"
+          style={{ width: `${forPercentage}%` }}
+        />
+        <div
+          className="h-full bg-destructive transition-all duration-500"
+          style={{ width: `${againstPercentage}%` }}
+        />
+        <div
+          className="h-full bg-zinc-400 dark:bg-zinc-600 transition-all duration-500"
+          style={{ width: `${abstainPercentage}%` }}
+        />
       </div>
-
-      <div
-        className={cn(
-          'absolute left-0 top-0 z-0 h-full rounded',
-          voteType === 'for' && 'bg-green-600/40',
-          voteType === 'against' && 'bg-destructive/40',
-          voteType === 'abstain' && 'bg-zinc-200'
-        )}
-        style={{
-          width: `${getPercentageOfTotalVotes(proposal[key], proposal)}%`,
-        }}
-      />
+      
+      <div className="mt-1 flex justify-between text-xs text-muted-foreground">
+        <div className="flex gap-5">
+          <span className="flex items-center">
+            <span className="mr-1.5 inline-block h-2 w-2 rounded-full bg-emerald-500"></span>
+            For ({forPercentage.toFixed(1)}%)
+          </span>
+          <span className="flex items-center">
+            <span className="mr-1.5 inline-block h-2 w-2 rounded-full bg-destructive"></span>
+            Against ({againstPercentage.toFixed(1)}%)
+          </span>
+          <span className="flex items-center">
+            <span className="mr-1.5 inline-block h-2 w-2 rounded-full bg-zinc-400 dark:bg-zinc-600"></span>
+            Abstain ({abstainPercentage.toFixed(1)}%)
+          </span>
+        </div>
+      </div>
     </div>
   )
 }

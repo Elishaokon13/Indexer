@@ -1,34 +1,51 @@
-import { EnhancedProposal } from 'indexer/types'
+import { EnhancedProposalWithVotes } from 'indexer/types'
 
+import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
 
-import { Badge, BadgeProps } from './ui/badge'
-
 type Props = {
-  proposal: EnhancedProposal
-} & React.HTMLAttributes<HTMLDivElement>
+  proposal: EnhancedProposalWithVotes
+  className?: string
+}
 
 export function ProposalStatus({ proposal, className }: Props) {
-  let variant: BadgeProps['variant'] = 'primary'
+  const now = Date.now()
+  const startTime = Number(proposal.startTimestamp) * 1000
+  const endTime = Number(proposal.endTimestamp) * 1000
 
-  const successBadge: EnhancedProposal['status'][] = [
-    'succeeded',
-    'queued',
-    'executed',
-  ]
-  const failedBadge: EnhancedProposal['status'][] = ['canceled', 'defeated']
+  let status = 'Active'
+  let variant:
+    | 'default'
+    | 'destructive'
+    | 'outline'
+    | 'secondary'
+    | 'success' = 'default'
 
-  if (successBadge.includes(proposal.status)) {
-    variant = 'success'
-  } else if (failedBadge.includes(proposal.status)) {
-    variant = 'destructive'
+  if (now < startTime) {
+    status = 'Pending'
+    variant = 'secondary'
+  } else if (now > endTime) {
+    if (proposal.canceledAtTimestamp) {
+      status = 'Canceled'
+      variant = 'destructive'
+    } else if (proposal.executedAtTimestamp) {
+      status = 'Executed'
+      variant = 'success'
+    } else if (proposal.queuedAtTimestamp) {
+      status = 'Queued'
+      variant = 'secondary'
+    } else {
+      status = 'Closed'
+      variant = 'outline'
+    }
   }
 
   return (
-    <Badge variant={variant} className={cn('w-fit', className)}>
-      {proposal.status === 'succeeded'
-        ? 'PASSED'
-        : proposal.status.toUpperCase()}
+    <Badge
+      variant={variant}
+      className={cn('shadow-sm transition-all duration-200', className)}
+    >
+      {status}
     </Badge>
   )
 }

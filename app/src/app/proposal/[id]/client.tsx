@@ -303,33 +303,29 @@ function VotingCardHeader({
   proposal: EnhancedProposalWithVotes
 }) {
   return (
-    <CardHeader className="space-y-2">
+    <CardHeader className="space-y-4">
       <CardTitle className="mb-4">Votes</CardTitle>
 
-      <VoteBar proposal={proposal} voteType="for" />
-
-      <VoteBar proposal={proposal} voteType="against" />
-
-      {parseVotes(proposal.abstainVotes) > 0 && (
-        <VoteBar proposal={proposal} voteType="abstain" />
-      )}
+      <VoteBar 
+        forValue={Number(proposal.forVotes)}
+        againstValue={Number(proposal.againstVotes)}
+        abstainValue={Number(proposal.abstainVotes)}
+      />
 
       {/* Quorum bar */}
-      <div className="relative overflow-hidden rounded bg-zinc-100">
-        <div className="relative z-10 flex justify-between gap-2 p-2 text-sm capitalize leading-none">
-          <Typography className="font-medium">
-            {getQuorumProgress(proposal)}%
-          </Typography>
-
-          <Typography>Quorum</Typography>
+      <div className="mt-4">
+        <div className="mb-1 flex justify-between text-sm">
+          <span className="font-medium">Quorum Progress</span>
+          <span>{getQuorumProgress(proposal)}%</span>
         </div>
-
-        <div
-          className="absolute left-0 top-0 z-0 h-full rounded bg-zinc-200"
-          style={{
-            width: `${getQuorumProgress(proposal)}%`,
-          }}
-        />
+        <div className="h-2 w-full overflow-hidden rounded-full bg-secondary">
+          <div
+            className="h-full bg-primary-brand/70 transition-all duration-500"
+            style={{
+              width: `${getQuorumProgress(proposal)}%`,
+            }}
+          />
+        </div>
       </div>
     </CardHeader>
   )
