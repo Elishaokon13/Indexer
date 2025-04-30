@@ -6,6 +6,7 @@ import Link from 'next/link'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { useEnsName } from 'wagmi'
+import { motion } from 'framer-motion'
 
 import { ConnectButton } from '@/components/ConnectButton'
 import { Footer } from '@/components/Footer'
@@ -39,11 +40,20 @@ type Props = {
   proposal: EnhancedProposalWithVotes
 }
 
+// Add Motion wrappers
+const MotionDiv = motion.div
+const MotionCard = motion(Card)
+
 export function ProposalPageClient({ proposal }: Props) {
   const { data: proposerEnsName } = useEnsName({ address: proposal.proposer })
 
   return (
-    <div className="container">
+    <MotionDiv
+      initial={{ opacity: 0, x: 20 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.6 }}
+      className="container"
+    >
       <div className="flex items-center justify-between">
         <Link
           href="/"
@@ -67,7 +77,9 @@ export function ProposalPageClient({ proposal }: Props) {
             </Typography>
           </div>
 
-          <Typography as="h1">{proposal.title}</Typography>
+          <Typography as="h1" gradient className="mb-2 text-3xl lg:text-5xl">
+            {proposal.title}
+          </Typography>
 
           <div className="flex flex-col justify-between gap-4 sm:flex-row">
             <Typography className="flex items-center text-sm">
@@ -109,9 +121,14 @@ export function ProposalPageClient({ proposal }: Props) {
       </div>
 
       {/* Mobile votes */}
-      <Card className="md:hidden">
+      <MotionCard
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: 0.2, duration: 0.5 }}
+        className="md:hidden hover-lift"
+      >
         <VotingCardHeader proposal={proposal} />
-      </Card>
+      </MotionCard>
 
       <a
         href="#votes"
@@ -127,7 +144,12 @@ export function ProposalPageClient({ proposal }: Props) {
 
       <div className="grid gap-6 lg:grid-cols-[2fr_1fr]">
         {/* Proposal */}
-        <Card className="h-fit overflow-x-auto rounded-xl shadow-[0_-4px_10px_0px_#00000008]">
+        <MotionCard
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.3, duration: 0.5 }}
+          className="h-fit overflow-x-auto rounded-xl hover-lift subtle-shadow"
+        >
           <Tabs defaultValue="body" className="md:p-3">
             <TabsList className="h-auto w-full justify-start rounded-lg p-2">
               <TabsTrigger className="w-full" value="body">
@@ -254,7 +276,7 @@ export function ProposalPageClient({ proposal }: Props) {
                         href={`https://etherscan.io/address/${target}`}
                         target="_blank"
                         className={buttonVariants({
-                          size: 'xs',
+                          size: 'sm',
                         })}
                       >
                         View Contract
@@ -264,7 +286,7 @@ export function ProposalPageClient({ proposal }: Props) {
                         href={`https://calldata.swiss-knife.xyz/decoder?calldata=${proposal.calldatas[index]}&chainId=1&address=${target}`}
                         target="_blank"
                         className={buttonVariants({
-                          size: 'xs',
+                          size: 'sm',
                         })}
                       >
                         Decode Calldata
@@ -275,11 +297,14 @@ export function ProposalPageClient({ proposal }: Props) {
               </TabsContent>
             </CardContent>
           </Tabs>
-        </Card>
+        </MotionCard>
 
         {/* Votes */}
-        <Card
-          className="sticky top-6 overflow-y-scroll rounded-xl shadow-[0_-4px_10px_0px_#00000008] lg:h-[calc(100svh-3rem)]"
+        <MotionCard
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.4, duration: 0.5 }}
+          className="sticky top-6 hover-lift subtle-shadow rounded-xl lg:h-[calc(100svh-3rem)]"
           id="votes"
         >
           <VotingCardHeader proposal={proposal} />
@@ -289,11 +314,11 @@ export function ProposalPageClient({ proposal }: Props) {
               return <ProposalVote key={vote.id} vote={vote} />
             })}
           </CardContent>
-        </Card>
+        </MotionCard>
       </div>
 
       <Footer />
-    </div>
+    </MotionDiv>
   )
 }
 

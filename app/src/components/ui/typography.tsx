@@ -123,4 +123,4 @@ const Subtle = React.forwardRef<HTMLParagraphElement, TypographyProps>(
 )
 Subtle.displayName = 'Subtle'
 
-export { H1, H2, H3, P, Lead, Large, Small, Subtle }
+export { H1, H2, H3, P, Lead, Large, Small, Subtle, P as Typography }
